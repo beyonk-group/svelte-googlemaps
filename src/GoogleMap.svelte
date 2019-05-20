@@ -54,8 +54,7 @@
       },
 
       setCentre (latLng) {
-        const { map } = this.refs
-        map.setCenter(latLng)
+        this.getInternalMap().setCenter(latLng)
       },
 
       getInternalMap() {
