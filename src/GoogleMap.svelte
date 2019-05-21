@@ -53,8 +53,10 @@
         map.style.maxHeight = height
       },
 
-      setCentre (latLng) {
-        this.getInternalMap().setCenter(latLng)
+      setCentre (location) {
+        this
+          .getInternalMap()
+          .setCenter(location)
       },
 
       getInternalMap() {
@@ -71,9 +73,9 @@
         this.set({ map })
 
         google.maps.event.addListener(map, 'dragend', function () {
-          const latLng = map.getCenter()
-          this.set({ center: latLng })
-          this.fire('recentre', { latLng })
+          const location = map.getCenter()
+          this.set({ center: location })
+          this.fire('recentre', { location })
         }.bind(this))
 
         this.fire('ready')
