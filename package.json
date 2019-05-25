@@ -38,5 +38,8 @@
     "src",
     "index.mjs",
     "index.js"
-  ]
+  ],
+  "dependencies": {
+    "@beyonk/async-script-loader": "^1.0.3"
+  }
 }

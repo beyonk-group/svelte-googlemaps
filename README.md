@@ -16,23 +16,21 @@ SSR Ready
 
 Documentation is a WIP. Be prepared to examine the source code to get any use out of this right now!
 
-The `GoogleSdk` components handles map loading, callbacks, and api deduplication, and the `GoogleMap` and `GooglePlaceSAutocomplete` components use the resulting API.
+The `GoogleMap` and `GooglePlaceSAutocomplete` components are a Google Map and Google Places Autocomplete component respectively.
 
 ## Usage
 
 ### To use within a Svelte application:
 
 ```jsx
-<GoogleSdk apiKey="your-maps-api-key" />
-<GooglePlacesAutocomplete />
-<GoogleMap />
+<GooglePlacesAutocomplete apiKey="your-maps-api-key"/>
+<GoogleMap apiKey="your-maps-api-key"/>
 
 <script>
-  import { GoogleSdk, GooglePlacesAutocomplete } from '@beyonk/svelte-googlemaps'
+  import { GoogleMap, GooglePlacesAutocomplete } from '@beyonk/svelte-googlemaps'
 
   export default {
     components: {
-      GoogleSdk,
       GoogleMap,
       GooglePlacesAutocomplete
     }

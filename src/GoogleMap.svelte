@@ -1,3 +1,4 @@
+<GoogleSdk {apiKey} on:ready="initialise()" />
 <div class="map" ref:map></div>
 
 <style>
@@ -26,10 +27,8 @@
       }
     },
 
-    async oncreate () {
-      const { lib, provider } = this.get()
-      await window[provider][lib].loader
-      this.initialise()
+    components: {
+      GoogleSdk: './GoogleSdk'
     },
 
     methods: {

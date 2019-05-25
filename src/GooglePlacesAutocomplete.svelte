@@ -1,3 +1,4 @@
+<GoogleSdk {apiKey} on:ready="initialise()" />
 <input aria-label="{ariaLabel}" class="{styleClass}" {placeholder} ref:search type="text" disabled="{disabled}" bind:value="viewValue" on:blur="blur()" />
 
 <script>
@@ -16,16 +17,12 @@
           types: ['(regions)'],
           fields: ['geometry', 'formatted_address']
         },
-        disabled: true,
-        provider: 'BEYONK',
-        lib: '@beyonk/svelte-googlemaps'
+        disabled: true
       }
     },
 
-    async oncreate () {
-      const { provider, lib } = this.get()
-      await window[provider][lib].loader
-      this.initialise()
+    components: {
+      GoogleSdk: './GoogleSdk'
     },
 
     methods: {

@@ -1,7 +1,6 @@
 <svelte:head>
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 </svelte:head>
-<GoogleSdk ref:sdk apiKey="%API_KEY%" />
 <header>
 	<div class="container">
 		<div class="row">
@@ -124,7 +123,6 @@
     },
 
     components: {
-      GoogleSdk: '../src/GoogleSdk.svelte',
 			GooglePlacesAutocomplete: '../src/GooglePlacesAutocomplete.svelte',
 			GoogleMap: '../src/GoogleMap.svelte'
     }
