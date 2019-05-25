@@ -44,6 +44,7 @@
       },
 
       initialise () {
+        console.log('places ready')
         const { options, update } = this.get()
 
         const { search } = this.refs

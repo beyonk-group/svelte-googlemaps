@@ -21,8 +21,6 @@
         value: undefined,
         styles: [],
         center: undefined,
-        provider: 'BEYONK',
-        lib: '@beyonk/svelte-googlemaps',
         options: {}
       }
     },
@@ -64,20 +62,24 @@
       },
 
       initialise () {
-        const { options } = this.get()
+        function slowRenderDown () {
+          const { options } = this.get()
 
-        const google = window['google']
-        const map = new google.maps.Map(this.refs.map, options)
+          const google = window['google']
+          const map = new google.maps.Map(this.refs.map, options)
 
-        this.set({ map })
+          this.set({ map })
 
-        google.maps.event.addListener(map, 'dragend', function () {
-          const location = map.getCenter()
-          this.set({ center: location })
-          this.fire('recentre', { location })
-        }.bind(this))
+          google.maps.event.addListener(map, 'dragend', function () {
+            const location = map.getCenter()
+            this.set({ center: location })
+            this.fire('recentre', { location })
+          }.bind(this))
 
-        this.fire('ready')
+          this.fire('ready')
+        }
+
+        setTimeout(slowRenderDown.bind(this), 1)
       }
     }
   }

@@ -4,30 +4,28 @@
   export default {
     props: ['apiKey'],
 
-    methods: {
-      init () {
-        this.fire('ready')
-      }
-    },
-
     async oncreate () {
       const component = this
       window.byGmapsReady = function () {
         component.root.set({ byMapsSdkLoaded: true })
-        component.init()
+        component.fire('ready')
         delete window['byGmapsReady']
       }
 
       const { version, apiKey, libraries } = this.get()
+      const { byMapsSdkLoaded, byMapsSdkLoading } = this.root.get()
 
-      const url = [
-        '//maps.googleapis.com/maps/api/js?',
-        apiKey ? `key=${apiKey}&` : '',
-        `libraries=places&callback=byGmapsReady`
-      ].join('')
+      if (byMapsSdkLoaded) {
+        return this.fire('ready')
+      }
 
-      const { byMapsSdkLoading } = this.root.get()
       if (!byMapsSdkLoading) {
+        const url = [
+          '//maps.googleapis.com/maps/api/js?',
+          apiKey ? `key=${apiKey}&` : '',
+          `libraries=places&callback=byGmapsReady`
+        ].join('')
+
         this.root.set({ byMapsSdkLoading: true })
         loader(
           url,
@@ -36,7 +34,7 @@
             return !!byMapsSdkLoaded
           },
           () => {
-            this.init()
+            this.fire('ready')
           }
         )
       }
