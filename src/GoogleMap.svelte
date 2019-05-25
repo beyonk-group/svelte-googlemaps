@@ -28,7 +28,7 @@
     },
 
     components: {
-      GoogleSdk: './GoogleSdk'
+      GoogleSdk: './GoogleSdk.svelte'
     },
 
     methods: {
