@@ -29,15 +29,15 @@
 						<h4>Navigation</h4>	
 						<nav>
 							<ul>
-								<li><a href="#places-autocomplete" on:click="navigate('places-autocomplete')" class:current="page === 'places-autocomplete'">Places Autocomplete</a></li>
-								<li><a href="#map" on:click="navigate('map')" class:current="page === 'map'">Map</a></li>
+								<li><a href="#places-autocomplete" on:click={() => { navigate('places-autocomplete') } } class:current={page === 'places-autocomplete'}>Places Autocomplete</a></li>
+								<li><a href="#map" on:click={() => { navigate('map') }} class:current={page === 'map'}>Map</a></li>
 							</ul>					
 						</nav>
 					</div>
 				</aside>
 				<div class="content-info">
 					<div class="section-txt" id="places-autocomplete">
-						<GooglePlacesAutocomplete apiKey="%API_KEY%" bind:value="place" />
+						<GooglePlacesAutocomplete apiKey="%API_KEY%" bind:value={place} />
             {#if place}
               <dl>
 								<dt>Name:</dt>
@@ -49,7 +49,7 @@
           </div>
 					<div class="section-txt" id="map">
 						<div class="map-wrap">
-							<GoogleMap apiKey="%API_KEY%" on:dragend="mapRecentre(event.center)" options={mapConfig} />
+							<GoogleMap apiKey="%API_KEY%" on:recentre={e => mapRecentre(e.detail)} options={mapConfig} />
 						</div>
 						{#if center}
 							<dt>Geolocation:</dt>
@@ -74,7 +74,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 center">
-				© 2018 Beyonk. All rights reserved.
+				© 2018 - 2019 Beyonk. All rights reserved.
 			</div>
 		</div>
 	</div>
@@ -91,40 +91,28 @@
   import './normalize.css'
   import './prettify.css'
   import './style.css'
-
+	import GooglePlacesAutocomplete from '../src/GooglePlacesAutocomplete.svelte'
+	import GoogleMap from '../src/GoogleMap.svelte'
   import logo from './logo.svg'
 
-  export default {
-    data () {
-      return {
-        logo,
-        page: 'about',
-				place: null,
-				mapConfig: {
-					center: {
-						lat: 53.58547136412861,
-						lng: -2.6269888562500228
-					},
-					zoom: 7
-				},
-				map: undefined
-      }
+	let page = 'about'
+	let place = null
+	let center
+	let mapConfig = {
+		center: {
+			lat: 53.58547136412861,
+			lng: -2.6269888562500228
 		},
+		zoom: 7
+	}
+	let map
 
-    methods: {			
-      navigate (page) {
-        this.set({ page })
-			},
-			
-			mapRecentre (center) {
-				const { latLng } = center
-        this.set({ center: latLng })
-			}
-    },
-
-    components: {
-			GooglePlacesAutocomplete: '../src/GooglePlacesAutocomplete.svelte',
-			GoogleMap: '../src/GoogleMap.svelte'
-    }
-  }
+	function navigate (next) {
+		page = next
+	}
+	
+	function mapRecentre ({ location }) {
+		const { lat, lng } = location
+		center = { lat: lat(), lng: lng() }
+	}
 </script>

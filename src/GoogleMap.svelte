@@ -1,5 +1,5 @@
-<GoogleSdk {apiKey} on:ready="initialise()" />
-<div class="map" ref:map></div>
+<GoogleSdk {apiKey} on:ready={initialise} />
+<div class="map" bind:this={mapElement}></div>
 
 <style>
   .map {
@@ -9,78 +9,58 @@
 </style>
 
 <script>
-  export default {
-    props: ['apiKey'],
+  import GoogleSdk from './GoogleSdk.svelte'
+  import { createEventDispatcher } from 'svelte'
 
-    data () {
-      return {
-        map: undefined,
-        apiKey: undefined,
-        placeholder: 'Location',
-        styleClass: '',
-        value: undefined,
-        styles: [],
-        center: undefined,
-        options: {}
-      }
-    },
+  const dispatch = createEventDispatcher()
 
-    components: {
-      GoogleSdk: './GoogleSdk.svelte'
-    },
+  export let apiKey
 
-    methods: {
-      getDomBounds () {
-        const { map } = this.refs
-        return map.getBoundingClientRect()
-      },
+  let mapElement
+  let map
+  
+  export let styleClass = ''
+  export let value = null
+  export let styles = []
+  export let center = null
+  export let options = {}
 
-      getDefaultView () {
-        const { map } = this.refs
-        return map.ownerDocument.defaultView
-      },
+  function getDomBounds () {
+    return mapElement.getBoundingClientRect()
+  }
 
-      setHeight (height) {
-        const { map } = this.refs
-        map.style.height = height
-      },
+  export function getDefaultView () {
+    return mapElement.ownerDocument.defaultView
+  }
 
-      setMaxHeight (height) {
-        const { map } = this.refs
-        map.style.maxHeight = height
-      },
+  export function setHeight (height) {
+    mapElement.style.height = height
+  }
 
-      setCentre (location) {
-        this
-          .getInternalMap()
-          .setCenter(location)
-      },
+  export function setMaxHeight (height) {
+    mapElement.style.maxHeight = height
+  }
 
-      getInternalMap() {
-        const { map } = this.get()
-        return map
-      },
+  export function setCentre (location) {
+    map.setCenter(location)
+  }
 
-      initialise () {
-        function slowRenderDown () {
-          const { options } = this.get()
+  export function getInternalMap() {
+    return map
+  }
 
-          const google = window['google']
-          const map = new google.maps.Map(this.refs.map, options)
+  function initialise () {
+    setTimeout(() => {
+      const google = window['google']
+      map = new google.maps.Map(mapElement, options)
 
-          this.set({ map })
+      google.maps.event.addListener(map, 'dragend', () => {
+        const location = map.getCenter()
+        center = location
+        dispatch('recentre', { location })
+      })
 
-          google.maps.event.addListener(map, 'dragend', function () {
-            const location = map.getCenter()
-            this.set({ center: location })
-            this.fire('recentre', { location })
-          }.bind(this))
-
-          this.fire('ready')
-        }
-
-        setTimeout(slowRenderDown.bind(this), 1)
-      }
-    }
+      dispatch('ready')
+    }, 1)
   }
 </script>

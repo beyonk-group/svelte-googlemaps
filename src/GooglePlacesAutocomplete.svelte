@@ -1,74 +1,66 @@
-<GoogleSdk {apiKey} on:ready="initialise()" />
-<input aria-label="{ariaLabel}" class="{styleClass}" {placeholder} ref:search type="text" disabled="{disabled}" bind:value="viewValue" on:blur="blur()" />
+<GoogleSdk {apiKey} on:ready={initialise} />
+<input aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} />
 
 <script>
-  export default {
-    props: ['apiKey'],
+  import GoogleSdk from './GoogleSdk.svelte'
+  import { createEventDispatcher } from 'svelte'
 
-    data () {
-      return {
-        ariaLabel: 'location',
-        apiKey: undefined,
-        placeholder: 'Location',
-        styleClass: '',
-        value: null,
-        viewValue: null,
-        options: {
-          types: ['(regions)'],
-          fields: ['geometry', 'formatted_address']
-        },
-        disabled: true
-      }
-    },
+  export let apiKey = null
+  export let ariaLabel = 'location'
+  export let placeholder = 'Location'
+  export let styleClass = ''
+  export let value = null
+  export let viewValue = null
+  export let options = {
+    types: ['(regions)'],
+    fields: ['geometry', 'formatted_address']
+  }
 
-    components: {
-      GoogleSdk: './GoogleSdk.svelte'
-    },
+  let search
+  let autocomplete
+  let currentPlace
+  let disabled = true
 
-    methods: {
-      clear () {
-        this.set({
-          value: null,
-          viewValue: null,
-          currentPlace: null
-        })
-        this.fire('clear')
-      },
+  const dispatch = createEventDispatcher()
 
-      blur () {
-        this.fire('blur')
-        const { viewValue, currentPlace } = this.get()
-        if (viewValue !== currentPlace) {
-          this.clear()
-        }
-      },
+  function clear () {
+    value = null
+    viewValue = null
+    currentPlace = null
 
-      initialise () {
-        const { options, update } = this.get()
+    dispatch('clear')
+  }
 
-        const { search } = this.refs
-        const google = window['google']
-        const autocomplete = new google.maps.places.Autocomplete(
-          search,
-          options
-        )
-
-        this.set({ autocomplete, disabled: false })
-        
-        autocomplete.addListener('place_changed', () => {
-          const { autocomplete, viewValue } = this.get()
-          const place = autocomplete.getPlace()
-          if (!!place.geometry) {
-            const { formatted_address } = place
-            this.set({ value: place, viewValue: formatted_address, currentPlace: formatted_address })
-            this.fire('placeChanged', { place })
-          } else {
-            this.clear()
-          }
-        })
-
-        this.fire('ready')
-      }
+  function blur () {
+    dispatch('blur')
+    if (viewValue !== currentPlace) {
+      clear()
     }
+  }
+
+  function initialise () {
+    const google = window['google']
+    autocomplete = new google.maps.places.Autocomplete(
+      search,
+      options
+    )
+
+    disabled = false
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace()
+
+      if (!place.geometry) {
+        return clear()
+      }
+
+      const { formatted_address } = place
+      value = place
+      viewValue = formatted_address
+      currentPlace = formatted_address
+      dispatch('placeChanged', { place })
+    })
+
+    dispatch('ready')
   }
 </script>

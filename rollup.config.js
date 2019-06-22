@@ -21,10 +21,7 @@ const plugins = [
 	resolve(),
 	commonjs(),
 	css(),
-	svelte({
-		cascade: false,
-		store: true
-	})
+	svelte()
 ]
 
 const output = [

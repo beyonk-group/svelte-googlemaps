@@ -1,43 +1,37 @@
 <script>
   import loader from '@beyonk/async-script-loader'
+  import { onMount, createEventDispatcher } from 'svelte'
+  import { mapsLoaded, mapsLoading } from './stores.js'
 
-  export default {
-    props: ['apiKey'],
+  const dispatch = createEventDispatcher()
 
-    async oncreate () {
-      const component = this
-      window.byGmapsReady = function () {
-        component.root.set({ byMapsSdkLoaded: true })
-        component.fire('ready')
-        delete window['byGmapsReady']
-      }
+  export let apiKey
 
-      const { version, apiKey, libraries } = this.get()
-      const { byMapsSdkLoaded, byMapsSdkLoading } = this.root.get()
-
-      if (byMapsSdkLoaded) {
-        return this.fire('ready')
-      }
-
-      if (!byMapsSdkLoading) {
-        const url = [
-          '//maps.googleapis.com/maps/api/js?',
-          apiKey ? `key=${apiKey}&` : '',
-          `libraries=places&callback=byGmapsReady`
-        ].join('')
-
-        this.root.set({ byMapsSdkLoading: true })
-        loader(
-          url,
-          () => {
-            const { byMapsSdkLoaded } = this.root.get()
-            return !!byMapsSdkLoaded
-          },
-          () => {
-            this.fire('ready')
-          }
-        )
-      }
+  onMount(() => {
+    window.byGmapsReady = () => {
+      mapsLoaded.set(true)
+      dispatch('ready')
+      delete window['byGmapsReady']
     }
-  }
+
+    if ($mapsLoaded) {
+      dispatch('ready')
+    }
+
+    if (!$mapsLoading) {
+      const url = [
+        '//maps.googleapis.com/maps/api/js?',
+        apiKey ? `key=${apiKey}&` : '',
+        `libraries=places&callback=byGmapsReady`
+      ].join('')
+
+      mapsLoading.set(true)
+
+      loader(
+        url,
+        () => { return $mapsLoaded },
+        () => { dispatch('ready') }
+      )
+    }
+  })
 </script>
