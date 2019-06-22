@@ -37,6 +37,7 @@
 				</aside>
 				<div class="content-info">
 					<div class="section-txt" id="places-autocomplete">
+						<form on:submit|preventDefault={() => console.log('form submitted') }>
 						<GooglePlacesAutocomplete apiKey="%API_KEY%" bind:value={place} />
             {#if place}
               <dl>
@@ -46,6 +47,7 @@
 								<dd>lat: {place.geometry.location.lat()}, lng: {place.geometry.location.lng()}</dd>
 							</dl>
             {/if}
+						</form>
           </div>
 					<div class="section-txt" id="map">
 						<div class="map-wrap">

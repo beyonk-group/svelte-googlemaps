@@ -1,5 +1,5 @@
 <GoogleSdk {apiKey} on:ready={initialise} />
-<input aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} />
+<input aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} on:keydown={autocompleteKeydown} />
 
 <script>
   import GoogleSdk from './GoogleSdk.svelte'
@@ -20,6 +20,7 @@
   let autocomplete
   let currentPlace
   let disabled = true
+  let dropdown
 
   const dispatch = createEventDispatcher()
 
@@ -29,6 +30,16 @@
     currentPlace = null
 
     dispatch('clear')
+  }
+
+  function dropdownVisible () {
+    return document.querySelectorAll('.pac-container')[0].offsetParent !== null
+  }
+
+  function autocompleteKeydown (e) {
+    if (e.keyCode == 13 && dropdownVisible()) { 
+      e.preventDefault()
+    }
   }
 
   function blur () {
