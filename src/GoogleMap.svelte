@@ -25,7 +25,7 @@
   export let center = null
   export let options = {}
 
-  function getDomBounds () {
+  export function getDomBounds () {
     return mapElement.getBoundingClientRect()
   }
 
