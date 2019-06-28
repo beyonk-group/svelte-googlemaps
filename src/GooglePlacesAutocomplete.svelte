@@ -24,7 +24,7 @@
 
   const dispatch = createEventDispatcher()
 
-  function clear () {
+  export function clear () {
     value = null
     viewValue = null
     currentPlace = null
