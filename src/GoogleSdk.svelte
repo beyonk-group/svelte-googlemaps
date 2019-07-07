@@ -10,7 +10,6 @@
   onMount(() => {
     window.byGmapsReady = () => {
       mapsLoaded.set(true)
-      dispatch('ready')
       delete window['byGmapsReady']
     }
 
