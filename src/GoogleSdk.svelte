@@ -6,6 +6,8 @@
   const dispatch = createEventDispatcher()
 
   export let apiKey
+  
+  $: $mapsLoaded && dispatch('ready')
 
   onMount(() => {
     window.byGmapsReady = () => {
@@ -28,8 +30,7 @@
 
       loader(
         url,
-        () => { return $mapsLoaded },
-        () => { dispatch('ready') }
+        () => { return $mapsLoaded }
       )
     }
   })
