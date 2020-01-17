@@ -16,7 +16,7 @@ SSR Ready
 
 Documentation is a WIP. Be prepared to examine the source code to get any use out of this right now!
 
-The `GoogleMap` and `GooglePlaceSAutocomplete` components are a Google Map and Google Places Autocomplete component respectively.
+The `GoogleMap` and `GooglePlacesAutocomplete` components are a Google Map and Google Places Autocomplete component respectively.
 
 ## Usage
 
