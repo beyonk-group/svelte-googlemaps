@@ -19,9 +19,6 @@
   let mapElement
   let map
   
-  export let styleClass = ''
-  export let value = null
-  export let styles = []
   export let center = null
   export let options = {}
 
