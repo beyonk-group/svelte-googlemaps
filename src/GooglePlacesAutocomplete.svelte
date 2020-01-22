@@ -69,7 +69,7 @@
       value = place
       viewValue = formatted_address
       currentPlace = formatted_address
-      dispatch('placeChanged', { place })
+      dispatch('placeChanged', { place, selectedPrediction: search.value })
     })
 
     dispatch('ready')
