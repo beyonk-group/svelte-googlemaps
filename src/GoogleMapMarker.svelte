@@ -6,7 +6,7 @@
   const map = getMap();
 
   export let lat;
-  export let lon;
+  export let lng;
 
   var marker = new google.maps.Marker({
     position: { lat, lng },
