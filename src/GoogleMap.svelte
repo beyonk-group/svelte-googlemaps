@@ -1,5 +1,9 @@
 <GoogleSdk {apiKey} on:ready={initialise} />
-<div class="map" bind:this={mapElement}></div>
+<div class="map" bind:this={mapElement}>
+  {#if map}
+    <slot></slot>
+  {/if}
+</div>
 
 <style>
   .map {
@@ -10,7 +14,13 @@
 
 <script>
   import GoogleSdk from './GoogleSdk.svelte'
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, setContext } from 'svelte'
+  import { key } from "./contexts"
+
+  setContext(contextKey, {
+    getMap: () => map,
+    getGoogleMap: () => mapElement
+	})
 
   const dispatch = createEventDispatcher()
 
@@ -41,10 +51,6 @@
 
   export function setCentre (location) {
     map.setCenter(location)
-  }
-
-  export function getInternalMap() {
-    return map
   }
 
   function initialise () {
