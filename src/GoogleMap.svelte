@@ -15,12 +15,12 @@
 <script>
   import GoogleSdk from './GoogleSdk.svelte'
   import { createEventDispatcher, setContext } from 'svelte'
-  import { key } from "./contexts"
+  import { key } from './contexts'
 
   setContext(key, {
     getMap: () => map,
     getGoogleMap: () => mapElement
-	})
+  })
 
   const dispatch = createEventDispatcher()
 
