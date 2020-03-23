@@ -17,7 +17,7 @@
   import { createEventDispatcher, setContext } from 'svelte'
   import { key } from "./contexts"
 
-  setContext(contextKey, {
+  setContext(key, {
     getMap: () => map,
     getGoogleMap: () => mapElement
 	})

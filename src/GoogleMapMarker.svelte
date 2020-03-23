@@ -10,7 +10,7 @@
   export let label;
 
   var marker = new google.maps.Marker({
-    position: { lat: -25.344, lng: 131.036 },
+    position: { lat, lng },
     map: map
   });
 </script>
