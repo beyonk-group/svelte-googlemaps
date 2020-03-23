@@ -7,7 +7,6 @@
 
   export let lat;
   export let lon;
-  export let label;
 
   var marker = new google.maps.Marker({
     position: { lat, lng },
