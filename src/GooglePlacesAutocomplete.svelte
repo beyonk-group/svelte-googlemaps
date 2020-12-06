@@ -1,26 +1,24 @@
 <GoogleSdk {apiKey} on:ready={initialise} />
-<input aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} on:keydown={autocompleteKeydown} />
+<input {id} aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} on:keydown={autocompleteKeydown} />
 
 <script>
   import GoogleSdk from './GoogleSdk.svelte'
   import { createEventDispatcher } from 'svelte'
 
+  export let id = `gm-autocomplete-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}}`
   export let apiKey = null
   export let ariaLabel = 'location'
   export let placeholder = 'Location'
   export let styleClass = ''
   export let value = null
   export let viewValue = null
-  export let options = {
-    types: ['(regions)'],
-    fields: ['geometry', 'formatted_address']
-  }
+  export let fields = ['geometry', 'formatted_address']
+  export let types = ['(regions)']
 
   let search
   let autocomplete
   let currentPlace
   let disabled = true
-  let dropdown
 
   const dispatch = createEventDispatcher()
 
@@ -53,17 +51,16 @@
     const google = window['google']
     autocomplete = new google.maps.places.Autocomplete(
       search,
-      options
+      {
+        fields,
+        types
+      }
     )
 
     disabled = false
 
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
-
-      if (!place.geometry) {
-        return clear()
-      }
 
       const { formatted_address } = place
       value = place

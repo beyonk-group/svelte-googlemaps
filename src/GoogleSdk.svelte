@@ -29,8 +29,11 @@
       mapsLoading.set(true)
 
       loader(
-        url,
-        () => { return $mapsLoaded }
+        [
+          { type: 'script', url }
+        ],
+        () => { return $mapsLoaded },
+        () => {}
       )
     }
   })
