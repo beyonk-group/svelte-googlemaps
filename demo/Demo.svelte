@@ -74,47 +74,73 @@
             <form on:submit|preventDefault={() => console.log('form submitted') }>
               <label for={addressFieldId}>
                 <span>Enter Address</span>
-                <GooglePlacesAutocomplete bind:id={addressFieldId} apiKey="%API_KEY%" types={[ 'geocode' ]} fields={[ 'address_component',  'geometry' ]} on:placeChanged={parseAddress} />
+                <GooglePlacesAutocomplete
+                  bind:id={addressFieldId}
+                  apiKey="%API_KEY%"
+                  types={[ 'geocode' ]}
+                  fields={[ 'address_component',  'geometry' ]}
+                  on:placeChanged={parseAddress}
+                  placeholder="Search..."
+                 />
               </label>
               {#if address}
-              <label>
-                <span>Building</span>
-                  <input type="text" bind:value={address.building} />
-                </label>
-                <label>
-                  <span>Street Address</span>
-                  <input type="text" bind:value={address.street} />
-                </label>
-                <label>
-                  <span>Line 1</span>
-                  <input type="text" bind:value={address.line1} />
-                </label>
-                <label>
-                  <span>County</span>
-                  <input type="text" bind:value={address.county} />
-                </label>
-                <label>
-                  <span>Postcode</span>
-                  <input type="text" bind:value={address.postCode} />
-                </label>
-                <label>
-                  <span>Country</span>
-                  <input type="text" bind:value={address.country} />
-                </label>
-                <label>
-                  <span>Lat</span>
-                  <input readonly type="text" bind:value={address.lat} />
-                </label>
-                <label>
-                  <span>Lng</span>
-                  <input readonly type="text" bind:value={address.lng} />
-                </label>
+              <div class="address">
+                <div class="fields">
+                  <label>
+                  <span>Building</span>
+                    <input type="text" bind:value={address.building} />
+                  </label>
+                  <label>
+                    <span>Street Address</span>
+                    <input type="text" bind:value={address.street} />
+                  </label>
+                  <label>
+                    <span>Line 1</span>
+                    <input type="text" bind:value={address.line1} />
+                  </label>
+                  <label>
+                    <span>County</span>
+                    <input type="text" bind:value={address.county} />
+                  </label>
+                  <label>
+                    <span>Postcode</span>
+                    <input type="text" bind:value={address.postCode} />
+                  </label>
+                  <label>
+                    <span>Country</span>
+                    <input type="text" bind:value={address.country} />
+                  </label>
+                  <label>
+                    <span>Lat</span>
+                    <input readonly type="text" bind:value={address.lat} />
+                  </label>
+                  <label>
+                    <span>Lng</span>
+                    <input readonly type="text" bind:value={address.lng} />
+                  </label>
+                </div>
+                <div class="mini-map">
+                  <GoogleMap
+                    apiKey="%API_KEY%"
+                    center={{ lat: address.lat, lng: address.lng }}
+                    zoom={17}
+                    on:recentre={e => updateAddressCoordinates(e.detail)}
+                  />
+                </div>
+              </div>
               {/if}
 						</form>
           </div>
 					<div class="section-txt" id="map">
 						<div class="map-wrap">
-							<GoogleMap apiKey="%API_KEY%" on:recentre={e => mapRecentre(e.detail)} options={mapConfig} />
+              <GoogleMap
+                apiKey="%API_KEY%"
+                on:recentre={e => mapRecentre(e.detail)}
+                zoom={7}
+                center={{
+                  lat: 53.58547136412861,
+                  lng: -2.6269888562500228
+                }} />
 						</div>
 						{#if center}
 							<dt>Geolocation:</dt>
@@ -164,12 +190,29 @@
 
   form label {
     display: flex;
+    margin: 6px 0;
   }
 
   form label span {
     display: flex;
     justify-content: center;
-    padding: 6px 24px;
+    padding: 6px 12px 6px 0;
+    width: 40%;
+  }
+
+  .address {
+    display: flex;
+  }
+
+  .address .fields {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .address .mini-map {
+    display: flex;
+    flex: 1;
   }
 </style>
 
@@ -183,13 +226,6 @@
 	let page = 'about'
   let place = null
   let center
-	let mapConfig = {
-		center: {
-			lat: 53.58547136412861,
-			lng: -2.6269888562500228
-		},
-		zoom: 7
-  }
 
   let address = null
   let addressFieldId
@@ -222,5 +258,11 @@
 	function mapRecentre ({ location }) {
 		const { lat, lng } = location
 		center = { lat: lat(), lng: lng() }
-	}
+  }
+  
+  function updateAddressCoordinates ({ location }) {
+    const { lat, lng } = location
+    address.lat = lat()
+    address.lng = lng()
+  } 
 </script>

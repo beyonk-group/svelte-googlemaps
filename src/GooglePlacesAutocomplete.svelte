@@ -12,8 +12,10 @@
   export let styleClass = ''
   export let value = null
   export let viewValue = null
-  export let fields = ['geometry', 'formatted_address']
+  export let viewLabel = 'formatted_address'
+  export let fields = ['geometry', viewLabel ]
   export let types = ['(regions)']
+  export let options = {}
 
   let search
   let autocomplete
@@ -51,10 +53,13 @@
     const google = window['google']
     autocomplete = new google.maps.places.Autocomplete(
       search,
-      {
-        fields,
-        types
-      }
+      Object.assign(
+        {
+          fields,
+          types
+        },
+        options
+      )
     )
 
     disabled = false
@@ -62,10 +67,9 @@
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
 
-      const { formatted_address } = place
-      value = place
-      viewValue = formatted_address
-      currentPlace = formatted_address
+      viewValue = place[viewLabel]
+      value = viewValue
+      currentPlace = place
       dispatch('placeChanged', { place, selectedPrediction: search.value })
     })
 

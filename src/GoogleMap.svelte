@@ -20,6 +20,7 @@
   let map
   
   export let center = null
+  export let zoom = 8
   export let options = {}
 
   export function getDomBounds () {
@@ -49,7 +50,13 @@
   function initialise () {
     setTimeout(() => {
       const google = window['google']
-      map = new google.maps.Map(mapElement, options)
+      map = new google.maps.Map(mapElement, Object.assign(
+        {
+          center,
+          zoom
+        },
+        options
+      ))
 
       google.maps.event.addListener(map, 'dragend', () => {
         const location = map.getCenter()
