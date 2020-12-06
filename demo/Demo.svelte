@@ -236,7 +236,7 @@
   }
 
   function parseAddress (ev) {
-    console.log('new place found')
+    const { place } = ev.detail
     address = {
       building: findAddressElement(place, 'street_number'),
       street: findAddressElement(place, 'route'),
