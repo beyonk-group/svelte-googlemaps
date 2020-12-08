@@ -5,7 +5,7 @@
   import GoogleSdk from './GoogleSdk.svelte'
   import { createEventDispatcher } from 'svelte'
 
-  export let id = `gm-autocomplete-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}}`
+  export let id = `gm-autocomplete-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`
   export let apiKey = null
   export let ariaLabel = 'location'
   export let placeholder = 'Location'
