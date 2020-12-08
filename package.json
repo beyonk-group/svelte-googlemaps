@@ -7,20 +7,27 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "NODE_ENV=development rollup -cw",
+    "lint": "eslint src",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@beyonk/async-script-loader": "^2.0.0",
+    "@beyonk/eslint-config": "^4.2.0",
     "@gen/rollup-plugin-generate-html": "^0.1.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-replace": "^2.3.4",
+    "eslint": "^7.15.0",
+    "eslint-plugin-svelte3": "^2.7.3",
     "rollup": "^2.34.1",
     "rollup-plugin-postcss": "^3.1.8",
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-svelte": "^7.0.0",
     "svelte": "^3.31.0"
+  },
+  "eslintConfig": {
+    "extends": "@beyonk/eslint-config/svelte"
   },
   "keywords": [
     "svelte",

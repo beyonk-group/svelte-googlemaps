@@ -55,7 +55,7 @@
 
   function initialise () {
     setTimeout(() => {
-      const google = window['google']
+      const google = window.google
       map = new google.maps.Map(mapElement, Object.assign(
         {
           center,

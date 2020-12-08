@@ -12,7 +12,7 @@
   onMount(() => {
     window.byGmapsReady = () => {
       mapsLoaded.set(true)
-      delete window['byGmapsReady']
+      delete window.byGmapsReady
     }
 
     if ($mapsLoaded) {
@@ -23,7 +23,7 @@
       const url = [
         '//maps.googleapis.com/maps/api/js?',
         apiKey ? `key=${apiKey}&` : '',
-        `libraries=places&callback=byGmapsReady`
+        'libraries=places&callback=byGmapsReady'
       ].join('')
 
       mapsLoading.set(true)

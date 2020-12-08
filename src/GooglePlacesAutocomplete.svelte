@@ -13,8 +13,8 @@
   export let value = null
   export let viewValue = null
   export let viewLabel = 'formatted_address'
-  export let fields = ['geometry', viewLabel ]
-  export let types = ['(regions)']
+  export let fields = [ 'geometry', viewLabel ]
+  export let types = [ '(regions)' ]
   export let options = {}
 
   let search
@@ -37,7 +37,7 @@
   }
 
   function autocompleteKeydown (e) {
-    if (e.keyCode == 13 && dropdownVisible()) { 
+    if (e.keyCode === 13 && dropdownVisible()) {
       e.preventDefault()
     }
   }
@@ -50,7 +50,7 @@
   }
 
   function initialise () {
-    const google = window['google']
+    const google = window.google
     autocomplete = new google.maps.places.Autocomplete(
       search,
       Object.assign(
