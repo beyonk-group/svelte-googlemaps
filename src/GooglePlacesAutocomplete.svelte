@@ -67,10 +67,12 @@
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
 
-      viewValue = place[viewLabel]
-      value = viewValue
-      currentPlace = place
-      dispatch('placeChanged', { place, selectedPrediction: search.value })
+      if (place.geometry) {
+        viewValue = place[viewLabel]
+        value = viewValue
+        currentPlace = place
+        dispatch('placeChanged', { place, selectedPrediction: search.value })
+      }
     })
 
     dispatch('ready')

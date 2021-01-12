@@ -59,13 +59,11 @@
 				<div class="content-info">
 					<div class="section-txt" id="places-autocomplete">
 						<form on:submit|preventDefault={() => console.log('form submitted') }>
-              <GooglePlacesAutocomplete apiKey="%API_KEY%" bind:value={place} />
+              <GooglePlacesAutocomplete apiKey={process.env.API_KEY} bind:value={place} />
               {#if place}
                 <dl>
                   <dt>Name:</dt>
-                  <dd>{place.formatted_address}</dd>
-                  <dt>Geolocation:</dt>
-                  <dd>lat: {place.geometry.location.lat()}, lng: {place.geometry.location.lng()}</dd>
+                  <dd>{place}</dd>
                 </dl>
               {/if}
 						</form>
@@ -76,7 +74,7 @@
                 <span>Enter Address</span>
                 <GooglePlacesAutocomplete
                   bind:id={addressFieldId}
-                  apiKey="%API_KEY%"
+                  apiKey={process.env.API_KEY}
                   types={[ 'geocode' ]}
                   fields={[ 'address_component',  'geometry' ]}
                   on:placeChanged={parseAddress}
@@ -121,7 +119,7 @@
                 </div>
                 <div class="mini-map">
                   <GoogleMap
-                    apiKey="%API_KEY%"
+                    apiKey={process.env.API_KEY}
                     center={{ lat: address.lat, lng: address.lng }}
                     zoom={17}
                     on:recentre={e => updateAddressCoordinates(e.detail)}
@@ -134,7 +132,7 @@
 					<div class="section-txt" id="map">
 						<div class="map-wrap">
               <GoogleMap
-                apiKey="%API_KEY%"
+                apiKey={process.env.API_KEY}
                 on:recentre={e => mapRecentre(e.detail)}
                 zoom={7}
                 center={{
@@ -236,6 +234,7 @@
   }
 
   function parseAddress (ev) {
+    console.log(ev)
     const { place } = ev.detail
     address = {
       building: findAddressElement(place, 'street_number'),

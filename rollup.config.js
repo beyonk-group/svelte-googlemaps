@@ -6,6 +6,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import css from 'rollup-plugin-postcss'
 import html from '@gen/rollup-plugin-generate-html'
 import replace from 'rollup-plugin-replace'
+import dotenv from 'rollup-plugin-dotenv'
 
 const name = pkg.name
 	.replace(/^(@\S+\/)?(svelte-)?(\S+)/, '$3')
@@ -27,12 +28,15 @@ const output = [
 ]
 
 if (dev) {
+	// plugins.unshift(
+	// 	replace({
+	// 		API_KEY: process.env.API_KEY,
+	// 		include: 'demo/Demo.svelte',
+	// 		delimiters: ['%', '%']
+	// 	}),
+	// )
 	plugins.unshift(
-		replace({
-			API_KEY: process.env.API_KEY,
-			include: 'demo/Demo.svelte',
-			delimiters: ['%', '%']
-		}),
+		dotenv()
 	)
 	plugins.push(
 		html({
