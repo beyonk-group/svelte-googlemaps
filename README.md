@@ -38,7 +38,7 @@ The `GoogleMap` and `GooglePlacesAutocomplete` components are a Google Map and G
 | Attribute | Purpose | Allowed | Default |
 |---|---|---|---|
 | ariaLabel | Sets aria-label value on input | string | 'location' |
-| on:placeChanged | Place changed event | any function | - |
+| on:placeChanged | Place changed event (does not fire if user hit enter without selecting an address) | any function | - |
 | placeholder | placeholder text | any string | - |
 | styleClass | css styles for input | any classes | - |
 
