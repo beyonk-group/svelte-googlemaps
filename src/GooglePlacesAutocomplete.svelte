@@ -44,7 +44,7 @@
 
   function blur () {
     dispatch('blur')
-    if (viewValue !== currentPlace) {
+    if (viewValue !== (currentPlace && currentPlace[viewLabel])) {
       clear()
     }
   }
