@@ -1,5 +1,5 @@
 <GoogleSdk {apiKey} on:ready={initialise} />
-<input {id} aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} on:keydown={autocompleteKeydown} />
+<input {id} aria-label={ariaLabel} class={styleClass} {placeholder} bind:this={search} type="text" {disabled} bind:value={viewValue} on:blur={blur} on:keydown={autocompleteKeydown} on:input={input} />
 
 <script>
   import GoogleSdk from './GoogleSdk.svelte'
@@ -19,7 +19,7 @@
 
   let search
   let autocomplete
-  let currentPlace
+  let valid
   let disabled = true
 
   const dispatch = createEventDispatcher()
@@ -27,7 +27,7 @@
   export function clear () {
     value = null
     viewValue = null
-    currentPlace = null
+    valid = true
 
     dispatch('clear')
   }
@@ -42,9 +42,13 @@
     }
   }
 
+  function input () {
+    valid = false
+  }
+
   function blur () {
     dispatch('blur')
-    if (viewValue !== (currentPlace && currentPlace[viewLabel])) {
+    if (!valid) {
       clear()
     }
   }
@@ -62,16 +66,20 @@
       )
     )
 
+    // Assume initial value is valid
+    valid = true
     disabled = false
 
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
 
       if (place.geometry) {
+        valid = true
         viewValue = place[viewLabel]
         value = viewValue
-        currentPlace = place
         dispatch('placeChanged', { place, selectedPrediction: search.value })
+      } else {
+        valid = false
       }
     })
 
