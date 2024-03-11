@@ -20,17 +20,17 @@
     }
 
     if (!$mapsLoading) {
-      const url = [
-        '//maps.googleapis.com/maps/api/js?',
-        apiKey ? `key=${apiKey}&` : '',
-        'libraries=places&callback=byGmapsReady'
-      ].join('')
+      const url = new URL('/maps/api/js', 'https://maps.googleapis.com')
+      url.searchParams.set('libraries', 'places')
+      url.searchParams.set('callback', 'byGmapsReady')
+      url.searchParams.set('loading', 'async')
+      apiKey && url.searchParams.set('key', apiKey)
 
       mapsLoading.set(true)
 
       loader(
         [
-          { type: 'script', url }
+          { type: 'script', url: url.toString() }
         ],
         () => { return $mapsLoaded },
         () => {}
